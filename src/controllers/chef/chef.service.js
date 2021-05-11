@@ -1,14 +1,12 @@
-import { responseMethod } from "../../helpers/index";
+import { responseMethod , hashPassword} from "../../helpers/index";
 import { responseCode } from "../../config/constant";
 var jwt = require("jsonwebtoken");
-// import { getAllCuisines } from "../../../../chef_joy_app/component/cuisine/lib/model";
 import {
   users,
   dish,
   chef_schedule,
   cuisine,
 } from "../../../../chef_joy_common/lib/mongo/db";
-import { getCuisine } from "../../../../chef_joy_cms/component/cuisine/lib/model";
 // import mongoose from 'mongoose'
 ObjectId = require("mongodb").ObjectID;
 
@@ -82,11 +80,11 @@ export default {
   async login(req, res) {
     try {
       const { password, email } = req.body;
-      const checkUser = await users.findOne({
-        $and: [{ password: password }, { email: email }],
-      });
+      const checkUser = await users.findOne({ email: email });
       if (checkUser) {
-        if (checkUser.email == email && checkUser.password == password) {
+        let salt = checkUser.salt;
+        let Pass = hashPassword(password, salt);
+        if (email===checkUser.email && Pass == checkUser.password) {
           const token = jwt.sign(
             {
               user: {
@@ -189,7 +187,7 @@ export default {
     try {
       var schedule_date = new Date().toUTCString();
       const chefbooking = await chef_schedule.find({
-        chef_id: "5e21d5de9079e87d296f7928",
+        chef_id: req.user._id,
         schedule_date: { $gt: schedule_date },
       });
 

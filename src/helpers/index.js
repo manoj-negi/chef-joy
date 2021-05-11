@@ -1,6 +1,5 @@
-
 import { responseCode } from '../config/constant'
-
+import crypto  from 'crypto'
 export const responseMethod = (
     req,
     res,
@@ -30,3 +29,11 @@ export const responseMethod = (
         data: null,
         success: false,
       });
+
+export const hashPassword =  (pass,salt) => {
+    let hash = crypto.createHmac('sha512', salt);
+        hash.update(pass);
+    let password = hash.digest('hex');
+    return password ;
+}
+     

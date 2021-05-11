@@ -1,11 +1,8 @@
 import { responseMethod } from "../../helpers/index";
 import { responseCode } from "../../config/constant";
 var jwt = require("jsonwebtoken");
-// import { getAllCuisines } from "../../../../chef_joy_app/component/cuisine/lib/model";
-import { cuisine } from "../../../../chef_joy_common/lib/mongo/db";
-import { getCuisine } from "../../../../chef_joy_cms/component/cuisine/lib/model";
-// import mongoose from 'mongoose'
-ObjectId = require("mongodb").ObjectID;
+import { cuisine, users } from "../../../../chef_joy_common/lib/mongo/db";
+ ObjectId = require("mongodb").ObjectID;
 
 export default {
   async getCuisine(req, res) {
@@ -41,20 +38,17 @@ export default {
       );
     }
   },
-
   async getChefCuisineNDish(req, res) {
     try {
-      const chef = await users
-        .find({ _id: req.user._id })
-        .populate({
+      const chef = await users.findOne({ _id: req.user._id }).populate({
           path: "dish",
           model: "dish",
-        })
-        .populate({
+        }).populate({
           path: "cuisine",
           model: "cuisine",
         });
       if (chef) {
+      //  delete chef.token
         return responseMethod(
           req,
           res,
@@ -74,6 +68,7 @@ export default {
         );
       }
     } catch (err) {
+      console.log("====",err  )
       return responseMethod(
         req,
         res,

@@ -1,12 +1,12 @@
 import { responseMethod } from "../../helpers/index";
 import { responseCode } from "../../config/constant";
 ObjectId = require("mongodb").ObjectID;
-import { homepage } from "../../../../chef_joy_common/lib/mongo/db";
+import { cms_setting, homepage } from "../../../../chef_joy_common/lib/mongo/db";
 
 export default {
   async getHomepageTemplate(req, res) {
     try {
-      const homepageTamplate = await homepage.find({ isActive: true });
+      const homepageTamplate = await cms_setting.find();
       if (homepageTamplate.length > 0) {
         return responseMethod(
           req,
