@@ -30,6 +30,7 @@ export default {
         return chef;
       })
       .catch((err) => {
+        console.log("=====errr",err)
         return responseMethod(
           req,
           res,

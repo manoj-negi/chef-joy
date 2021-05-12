@@ -3,9 +3,7 @@ import { responseCode } from "../../config/constant";
 var jwt = require("jsonwebtoken");
 import {
   users,
-  dish,
   chef_schedule,
-  cuisine,
 } from "../../../../chef_joy_common/lib/mongo/db";
 // import mongoose from 'mongoose'
 ObjectId = require("mongodb").ObjectID;
@@ -117,7 +115,7 @@ export default {
             {},
             responseCode.OK,
             true,
-            "email password is wrong"
+            "password is wrong"
           );
         }
       } else {
@@ -127,7 +125,7 @@ export default {
           {},
           responseCode.OK,
           false,
-          "Something went wrong"
+          "please enter a valid email."
         );
       }
     } catch (error) {

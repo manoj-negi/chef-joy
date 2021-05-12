@@ -15,7 +15,7 @@ const apiRoutes = require("./src/routes/apiRoutes");
 const apiAuth = require("./src/middleware/apiAuth");
 
 app.use(cors());
-
+app.use(express.json())
 app.use(
   bodyParser.urlencoded({
     extended: true,

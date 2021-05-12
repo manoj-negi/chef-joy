@@ -1,0 +1,51 @@
+const Joi = require('joi');
+
+
+export const login = {
+    body: Joi.object().keys({
+      email: Joi.string()
+        .required().regex(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).error(errors => {
+          errors.forEach(err => {
+            switch (err.type) {
+              case "any.empty":
+                err.message = "Email should not be empty!";
+                break;
+                case "any.required":
+                err.message = "Email is required field!";
+                break;
+              case "string.regex.base":
+                err.message = "Invalid email id"
+              default:
+                break;
+            }
+          });
+          return errors;
+        }),
+      password: Joi.string().required().error(errors => {
+        errors.forEach(err => {
+          switch (err.type) {
+            case "any.empty":
+              err.message = "password should not be empty!";
+              break;
+              case "any.required":
+              err.message = "password is required field!";
+              break;
+            default:
+              break;
+          }
+        });
+        return errors;
+      })
+    }).unknown(false).error(errors => {
+      errors.forEach(err => {
+        switch (err.type) {
+          case "object.allowUnknown":
+            err.message = err.path[0] + ` parameter  is not allowed!`;
+            break;
+          default:
+            break
+        }
+      });
+      return errors;
+    })
+  };
