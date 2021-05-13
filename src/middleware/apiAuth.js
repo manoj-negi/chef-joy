@@ -4,9 +4,9 @@ const jwt = require('jsonwebtoken');
 
 
 const apiAuth = async (req, res, next) => {
-
-  const token = req.headers['x-token'];
   try {
+  const token = req.headers['x-token'];
+  if(!token)  { return errorResponse(req, res, "token is not provided.")}
     const decoded = jwt.verify(token, process.env.SECRET);
     req.user = decoded.user;
     const user = await users.findOne({

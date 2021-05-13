@@ -113,7 +113,7 @@ export default {
             req,
             res,
             {},
-            responseCode.OK,
+            responseCode.FORBIDDEN,
             true,
             "password is wrong"
           );
@@ -123,7 +123,7 @@ export default {
           req,
           res,
           {},
-          responseCode.OK,
+          responseCode.FORBIDDEN,
           false,
           "please enter a valid email."
         );
@@ -134,7 +134,7 @@ export default {
         req,
         res,
         {},
-        responseCode.OK,
+        responseCode.INTERNAL_SERVER_ERROR,
         false,
         "Something went wrong"
       );

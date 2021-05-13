@@ -24,4 +24,25 @@ export default {
         );
       });
   },
+
+  async getDishByName(req, res) {
+    await dishService
+      .getDishByName(req, res)
+      .then((resp) => {
+        if (resp) {
+          return resp;
+        }
+      })
+      .catch((err) => {
+        console.log(chalk.red("add Dish--- err- 1"));
+        responseMethod(
+          req,
+          res,
+          {},
+          responseCode.INTERNAL_SERVER_ERROR,
+          false,
+          "Something went wrong"
+        );
+      });
+  },
 };
