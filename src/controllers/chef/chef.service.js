@@ -1,10 +1,13 @@
-import { responseMethod , hashPassword} from "../../helpers/index";
+import { responseMethod, hashPassword } from "../../helpers/index";
 import { responseCode } from "../../config/constant";
 var jwt = require("jsonwebtoken");
 import {
   users,
   chef_schedule,
+  chef_post,
 } from "../../../../chef_joy_common/lib/mongo/db";
+import { prototype } from "express-validation/lib/validation-error";
+import { ObjectID } from "bson";
 // import mongoose from 'mongoose'
 ObjectId = require("mongodb").ObjectID;
 
@@ -74,7 +77,6 @@ export default {
       );
     }
   },
-
   async login(req, res) {
     try {
       const { password, email } = req.body;
@@ -82,7 +84,7 @@ export default {
       if (checkUser) {
         let salt = checkUser.salt;
         let Pass = hashPassword(password, salt);
-        if (email===checkUser.email && Pass == checkUser.password) {
+        if (email === checkUser.email && Pass == checkUser.password) {
           const token = jwt.sign(
             {
               user: {
@@ -140,22 +142,45 @@ export default {
       );
     }
   },
-
-  async updateProfile(req, res) {
+  async getChefProfile(req, res) {
     try {
-      const { first_name } = req.body;
-      var filter = { _id: req.user._id };
-      let updateProfile = await users.findOneAndUpdate(filter, req.body, {
-        new: true,
-      });
+      let updateProfile = await users.aggregate([
+        {
+          $match: { _id: req.user._id },
+        },
+        {
+          $project: {
+            first_name: 1,
+            email: 1,
+            mobile: 1,
+            zipcode: 1,
+            description: 1,
+            profile_pic: 1,
+            images: 1,
+          },
+        },
+        {
+          $addFields: {
+            _id: { $toString: "$_id" },
+          },
+        },
+        {
+          $lookup: {
+            from: "stripe_users",
+            localField: "_id",
+            foreignField: "user_id",
+            as: "bankDetails",
+          },
+        },
+      ]);
       if (updateProfile) {
         return responseMethod(
           req,
           res,
           updateProfile,
-          responseCode.INTERNAL_SERVER_ERROR,
+          responseCode.OK,
           false,
-          "Chef profile update successfully."
+          "Get chef profile  successfully."
         );
       } else {
         return responseMethod(
@@ -164,9 +189,8 @@ export default {
           {},
           responseCode.INTERNAL_SERVER_ERROR,
           false,
-          "Profile is not updated."
+          "not found."
         );
-
       }
     } catch (err) {
       console.log("======erorr", err);
@@ -180,7 +204,48 @@ export default {
       );
     }
   },
+  async updateProfile(req, res) {
+    try {
 
+      console.log("   req.body",req.body)
+      const { first_name, mobile, zipcode } = req.body;
+      req.body.images = req.body.image
+      var filter = { _id: req.user._id };
+      let updateProfile = await users.findOneAndUpdate(filter, req.body, {
+        new: true,
+      });
+      console.log("====updateProfile",updateProfile)
+      if (updateProfile) {
+        return responseMethod(
+          req,
+          res,
+          updateProfile,
+          responseCode.OK,
+          true,
+          "Chef profile update successfully."
+        );
+      } else {
+        return responseMethod(
+          req,
+          res,
+          {},
+          responseCode.INTERNAL_SERVER_ERROR,
+          false,
+          "something went wrong."
+        );
+      }
+    } catch (err) {
+      console.log("======erorr", err);
+      return responseMethod(
+        req,
+        res,
+        {},
+        responseCode.INTERNAL_SERVER_ERROR,
+        false,
+        "something went wrong"
+      );
+    }
+  },
   async getChefBooking(req, res) {
     try {
       var schedule_date = new Date().toUTCString();
@@ -213,6 +278,79 @@ export default {
         req,
         res,
         user,
+        responseCode.INTERNAL_SERVER_ERROR,
+        false,
+        "something went wrong"
+      );
+    }
+  },
+  async addPost(req, res) {
+    try {
+      req.body.images = req.body.image
+      req.body.chefId = req.user._id;
+      await chef_post
+        .create(req.body)
+        .then((chefPost) => {
+          return responseMethod(
+            req,
+            res,
+            chefPost,
+            responseCode.OK,
+            true,
+            "Add post successfully"
+          );
+        })
+        .catch((err) => {
+          return responseMethod(
+            req,
+            res,
+            {},
+            responseCode.INTERNAL_SERVER_ERROR,
+            true,
+            "something went wrong"
+          );
+        });
+    } catch (err) {
+      responseMethod(
+        req,
+        res,
+        {},
+        responseCode.INTERNAL_SERVER_ERROR,
+        false,
+        "something went wrong"
+      );
+    }
+  },
+  async getPost(req, res) {
+    try {
+      var perPage = 10
+      var page = req.query.page - 1
+      const post = await chef_post.find({chefId:req.user._id}).limit(perPage).skip(perPage * page)
+      if (post.length > 0) {
+        return responseMethod(
+          req,
+          res,
+          post,
+          responseCode.OK,
+          true,
+          "Add post successfully"
+        );
+      } else {
+        return responseMethod(
+          req,
+          res,
+          {},
+          responseCode.NOT_FOUND,
+          true,
+          "Data not found"
+        );
+      }
+    } catch (err) {
+      console.log(err)
+      responseMethod(
+        req,
+        res,
+        {},
         responseCode.INTERNAL_SERVER_ERROR,
         false,
         "something went wrong"

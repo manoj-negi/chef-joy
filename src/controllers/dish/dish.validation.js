@@ -1,16 +1,15 @@
 const Joi = require('joi');
-{ name, description, image1, cuisine } 
 
-export const login = {
+export const dish = {
     body: Joi.object().keys({
       name: Joi.string().required().error(errors => {
           errors.forEach(err => {
             switch (err.type) {
               case "any.empty":
-                err.message = "Email should not be empty!";
+                err.message = "Name should not be empty!";
                 break;
                 case "any.required":
-                err.message = "Email is required field!";
+                err.message = "Name is required field!";
                 break;
               default:
                 break;
@@ -22,17 +21,18 @@ export const login = {
         errors.forEach(err => {
           switch (err.type) {
             case "any.empty":
-              err.message = "password should not be empty!";
+              err.message = "Cuisine should not be empty!";
               break;
               case "any.required":
-              err.message = "password is required field!";
+              err.message = "Cuisine is required field!";
               break;
             default:
               break;
           }
         });
         return errors;
-      })
+      }),
+      description:Joi.string().allow('')
     }).unknown(false).error(errors => {
       errors.forEach(err => {
         switch (err.type) {

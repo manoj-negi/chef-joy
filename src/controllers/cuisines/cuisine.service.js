@@ -38,6 +38,7 @@ export default {
       );
     }
   },
+
   async getChefCuisineNDish(req, res) {
     try {
       const chef = await users.findOne({ _id: req.user._id }).populate({

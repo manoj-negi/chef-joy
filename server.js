@@ -2,6 +2,7 @@ require("@babel/register");
 const express = require("express");
 const app = express();
 require("dotenv").config();
+const path =require('path')
 const Validate = require("express-validation");
 PORT = process.env.PORT;
 const chalk = require("chalk");
@@ -21,8 +22,11 @@ app.use(
     extended: true,
   })
 );
+app.use(express.static(path.join(__dirname, 'public')))
+
 app.use("/pub", pubRoutes);
 app.use("/api", apiAuth, apiRoutes);
+
 
 app.use(function (err, req, res, next) {
   // specific for validation errors

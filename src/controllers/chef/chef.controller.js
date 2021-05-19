@@ -30,7 +30,25 @@ export default {
         return chef;
       })
       .catch((err) => {
-        console.log("=====errr",err)
+        console.log("=====errr", err);
+        return responseMethod(
+          req,
+          res,
+          {},
+          responseCode.INTERNAL_SERVER_ERROR,
+          false,
+          "Something went wrong"
+        );
+      });
+  },
+
+  async getChefProfile(req, res) {
+    await chefService
+      .getChefProfile(req, res)
+      .then((chef) => {
+        return chef;
+      })
+      .catch((err) => {
         return responseMethod(
           req,
           res,
@@ -70,6 +88,49 @@ export default {
       })
       .catch((err) => {
         console.log(chalk.red("get Cuisine --- err- 1"));
+        responseMethod(
+          req,
+          res,
+          {},
+          responseCode.INTERNAL_SERVER_ERROR,
+          false,
+          "Something went wrong"
+        );
+      });
+  },
+
+  async addPost(req, res) {
+    await chefService
+      .addPost(req, res)
+      .then((resp) => {
+        if (resp) {
+          return resp;
+        }
+      })
+      .catch((err) => {
+        console.log(chalk.red("get Cuisine --- err- 1"), err);
+        responseMethod(
+          req,
+          res,
+          {},
+          responseCode.INTERNAL_SERVER_ERROR,
+          false,
+          "Something went wrong"
+        );
+      });
+  },
+
+
+  async getPost(req, res) {
+    await chefService
+      .getPost(req, res)
+      .then((resp) => {
+        if (resp) {
+          return resp;
+        }
+      })
+      .catch((err) => {
+        console.log(chalk.red("get Cuisine --- err- 1"), err);
         responseMethod(
           req,
           res,

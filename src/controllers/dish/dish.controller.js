@@ -4,6 +4,7 @@ import { responseCode } from "../../config/constant";
 import chalk from "chalk";
 
 export default {
+  
   async addDish(req, res) {
     await dishService
       .addDish(req, res)
@@ -24,7 +25,6 @@ export default {
         );
       });
   },
-
   async getDishByName(req, res) {
     await dishService
       .getDishByName(req, res)
@@ -45,4 +45,5 @@ export default {
         );
       });
   },
+
 };

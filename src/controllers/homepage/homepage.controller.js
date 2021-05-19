@@ -8,7 +8,6 @@ import chalk from "chalk";
 export default {
     async getHomepageTemplate(req, res) {
 
-        console.log("==== i am here")
         await homepageService.getHomepageTemplate(req, res ).then(resp => {
             if (resp) {
                 return resp;
