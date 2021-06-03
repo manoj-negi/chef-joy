@@ -8,11 +8,9 @@ PORT = process.env.PORT;
 const chalk = require("chalk");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const CONFIG = require("./src/config/mongodb");
-require("../chef_joy_common").setMongoConnection(CONFIG.DBURL);
+require("./src/config/mongodb")
 const pubRoutes = require("./src/routes/chef.route");
 const apiRoutes = require("./src/routes/apiRoutes");
-
 const apiAuth = require("./src/middleware/apiAuth");
 
 app.use(cors());
@@ -26,8 +24,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use("/pub", pubRoutes);
 app.use("/api", apiAuth, apiRoutes);
-
-
 app.use(function (err, req, res, next) {
   // specific for validation errors
   if (err instanceof Validate.ValidationError)

@@ -32,8 +32,13 @@ export const dish = {
         });
         return errors;
       }),
-      description:Joi.string().allow('')
-    }).unknown(false).error(errors => {
+      description:Joi.string().allow(''),
+      image:Joi.array().allow(),
+      food_type:Joi.number().valid(1,2,3).allow(''),
+      ingredient: Joi.string().allow(''),
+      cooking_info:Joi.array().allow(''),
+      cuisine_category:Joi.string().required()
+    }).unknown(true).error(errors => {
       errors.forEach(err => {
         switch (err.type) {
           case "object.allowUnknown":

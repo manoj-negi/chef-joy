@@ -141,4 +141,110 @@ export default {
         );
       });
   },
+  
+  async getAllChef(req, res) {
+    await chefService
+      .getAllChef(req, res)
+      .then((resp) => {
+        if (resp) {
+          return resp;
+        }
+      })
+      .catch((err) => {
+        console.log(chalk.red("get Cuisine --- err- 1"), err);
+        responseMethod(
+          req,
+          res,
+          {},
+          responseCode.INTERNAL_SERVER_ERROR,
+          false,
+          "Something went wrong"
+        );
+      });
+  },
+
+  async requestForChef(req, res) {
+    await chefService
+      .requestForChef(req, res)
+      .then((resp) => {
+        if (resp) {
+          return resp;
+        }
+      })
+      .catch((err) => {
+        console.log(chalk.red("request for  chef --- err- 1"), err);
+        responseMethod(
+          req,
+          res,
+          {},
+          responseCode.INTERNAL_SERVER_ERROR,
+          false,
+          "Something went wrong"
+        );
+      });
+  },
+
+  async forgotPassword(req, res) {
+    await chefService
+      .forgotPassword(req, res)
+      .then((resp) => {
+        if (resp) {
+          return resp;
+        }
+      })
+      .catch((err) => {
+        console.log(chalk.red("forgot password for  chef --- err- 1"), err);
+        responseMethod(
+          req,
+          res,
+          {},
+          responseCode.INTERNAL_SERVER_ERROR,
+          false,
+          "Something went wrong"
+        );
+      });
+  },
+
+  // async setPasswordPage(req, res) {
+  //   await chefService
+  //     .setPasswordPage(req, res)
+  //     .then((resp) => {
+  //       if (resp) {
+  //         return resp;
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(chalk.red("forgot password for  chef --- err- 1"), err);
+  //       responseMethod(
+  //         req,
+  //         res,
+  //         {},
+  //         responseCode.INTERNAL_SERVER_ERROR,
+  //         false,
+  //         "Something went wrong"
+  //       );
+  //     });
+  // },
+
+
+  async resetPassword(req, res) {
+    await chefService
+      .resetPassword(req, res)
+      .then((resp) => {
+        if (resp) {
+          return resp;
+        }
+      })
+      .catch((err) => {
+        console.log(chalk.red("forgot password for  chef --- err- 1"), err);
+        responseMethod(
+          req,
+          res,
+          {},
+          responseCode.INTERNAL_SERVER_ERROR,
+          false,
+          "Something went wrong"
+        );
+      });
+  },
 };

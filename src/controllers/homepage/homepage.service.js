@@ -1,7 +1,7 @@
 import { responseMethod } from "../../helpers/index";
 import { responseCode } from "../../config/constant";
-ObjectId = require("mongodb").ObjectID;
-import { cms_setting, homepage } from "../../../../chef_joy_common/lib/mongo/db";
+var ObjectId = require("mongodb").ObjectID;
+import { cms_setting, homepage } from "../../models/index";
 
 export default {
   async getHomepageTemplate(req, res) {

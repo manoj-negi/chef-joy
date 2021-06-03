@@ -8,3 +8,10 @@ import * as dishValidation from './dish.validation'
 
 dishRouter.post('/add-dish', validate(dishValidation.dish), dishController.addDish)
 dishRouter.get('/get-dish',  dishController.getDishByName)
+dishRouter.get('/get-chef-dish',  dishController.getChefDish)
+dishRouter.get('/get-dish-by-cusineId/:cuisineId',  dishController.getDishByCuisine)
+dishRouter.put('/update-dish/:dishId', dishController.editDishByChef)
+dishRouter.get('/get-dish-by-id/:dishId', dishController.getDishById)
+
+
+

@@ -14,5 +14,4 @@ import * as genericController from "../generic/generic.controller";
  chefRouter.get('/get-post', chefController.getPost)
 chefRouter.put("/upload-image", upload.single("profile_pic"), genericController.uploadImage);
 chefRouter.put("/upload-bulk-image", bulkUpload, genericController.bulkUploads);
-chefRouter.delete("/remove-image/:filename", removeImage);
-
+chefRouter.delete("/remove-image/:filename", genericController.removeImage);

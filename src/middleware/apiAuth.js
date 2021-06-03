@@ -1,5 +1,5 @@
 import { errorResponse } from '../helpers';
-import { users } from '../../../chef_joy_common/lib/mongo/db';
+import { users } from '../models/index';
 const jwt = require('jsonwebtoken');
 
 
